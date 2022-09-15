@@ -1,6 +1,5 @@
 node_modules/
 web/
-mobile/
 .expo/
 dist/
 npm-debug.*
