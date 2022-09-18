@@ -39,13 +39,21 @@ Aplicação web e mobile desenvolvida na trilha Ignite do NLW eSports da [Rocket
 - [ ] a
 
 <br>
-<h3> 🚀 Adicionais: </h3>
 
-- [ ]
-- [ ]
+<h3> 🚀 Prints: </h3>
+<p>
+  <img src="https://i.postimg.cc/N0WNSPdN/web.png" alt="NLW" tittle="Logo Rocketseat" width="400" align="left">
+<img src="https://i.postimg.cc/6pbbLQnx/mobile.png" alt="NLW" tittle="Logo Rocketseat" width="400" align="left">
+</p>
 
+<br><br>
+<br><br>
+<br><br>
+<br><br>
+
+<br>
 <br>
 <h3> 🔮 Implementações futuras </h3>
 
-- [ ]
+- [x]
 - [ ]

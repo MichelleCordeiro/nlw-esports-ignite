@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
-import { TouchableOpacity, View, Image, Text, FlatList } from 'react-native'
+import { FlatList, Image, Text, TouchableOpacity, View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { useNavigation, useRoute } from '@react-navigation/native'
+import { useRoute, useNavigation } from '@react-navigation/native'
 import { Entypo } from '@expo/vector-icons'
 
 import logoImg from '../../assets/logo-nlw-esports.png'
@@ -9,14 +9,18 @@ import logoImg from '../../assets/logo-nlw-esports.png'
 import { THEME } from '../../theme'
 import { styles } from './styles'
 
-import { GameParams } from '../../@types/@navigation.d'
+import { GameParams } from '../../@types/@navigation'
 
 import { Background } from '../../components/Background'
 import { Heading } from '../../components/Heading'
 import { DuoCard, DuoCardProps } from '../../components/DuoCard'
+import { DuoMatch } from '../../components/DuoMatch'
+//import { async } from '../../../node_modules/expo-clipboard/build/web/Utils'
 
 export function Game() {
   const [duos, setDuos] = useState<DuoCardProps[]>([])
+  const [discordDuoSelected, setDiscordDuoSelected] = useState('')
+
   const navigation = useNavigation()
   const route = useRoute()
   const game = route.params as GameParams
@@ -26,8 +30,21 @@ export function Game() {
     navigation.goBack()
   }
 
+  async function getDiscordUser(adsId: string) {
+    fetch(`http://192.168.0.9:3333/ads/${adsId}/discord`)
+      .then(response => response.json())
+      .then(data => {
+        setDiscordDuoSelected(data.discord)
+        //console.log(data)
+        //console.log(data.discord)
+        // })
+        // .catch(error => {
+        //   console.error(error)
+      })
+  }
+
   useEffect(() => {
-    fetch(`http://192.168.1.7:3333/games/${game.id}/ads`)
+    fetch(`http://192.168.0.9:3333/games/${game.id}/ads`)
       .then(response => response.json())
       .then(data => {
         // console.log(data)
@@ -54,14 +71,24 @@ export function Game() {
         <FlatList
           data={duos}
           keyExtractor={item => item.id}
-          renderItem={({ item }) => <DuoCard data={item} onConnect={() => {}} />}
+          renderItem={({ item }) => (
+            <DuoCard data={item} onConnect={() => getDiscordUser(item.id)} />
+          )}
           horizontal
           style={styles.containerList}
           contentContainerStyle={[duos.length > 0 ? styles.contentList : styles.emptyListContent]}
           showsHorizontalScrollIndicator={false}
           ListEmptyComponent={() => (
-            <Text style={styles.emptyListText}>Não há anúncios publicados, ainda.</Text>
+            <Text style={styles.emptyListText}>
+              Ainda não há anúncios publicados para esse jogo.
+            </Text>
           )}
+        />
+        <DuoMatch
+          //visible={discordDuoSelected.length > 0}
+          visible={discordDuoSelected.length > 0}
+          discord={discordDuoSelected}
+          onClose={() => setDiscordDuoSelected('')}
         />
       </SafeAreaView>
     </Background>
